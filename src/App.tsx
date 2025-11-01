@@ -17,6 +17,7 @@ import ClientMessages from "./pages/client/Messages";
 import ClientPayments from "./pages/client/Payments";
 import ClientProfile from "./pages/client/Profile";
 import StaffDashboard from "./pages/staff/Dashboard";
+import StaffCases from "./pages/staff/Cases";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminUsers from "./pages/admin/Users";
 
@@ -59,7 +60,7 @@ const App = () => (
               }
             >
               <Route index element={<StaffDashboard />} />
-              <Route path="cases" element={<div className="text-center py-12 text-muted-foreground">Cases Management (Coming Soon)</div>} />
+              <Route path="cases" element={<StaffCases />} />
               <Route path="clients" element={<div className="text-center py-12 text-muted-foreground">Clients Database (Coming Soon)</div>} />
               <Route path="documents" element={<div className="text-center py-12 text-muted-foreground">Document Review (Coming Soon)</div>} />
               <Route path="messages" element={<div className="text-center py-12 text-muted-foreground">Messages (Coming Soon)</div>} />
