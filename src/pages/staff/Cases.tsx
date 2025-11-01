@@ -202,6 +202,7 @@ export default function Cases() {
         .rpc("generate_case_number");
 
       if (caseNumberError) throw caseNumberError;
+      if (!caseNumber) throw new Error("Failed to generate case number");
 
       const { error } = await supabase.from("cases").insert([{
         ...newCase,
