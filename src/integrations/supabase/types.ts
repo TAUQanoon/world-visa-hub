@@ -14,13 +14,537 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      builder_io_webhooks: {
+        Row: {
+          created_at: string
+          created_case_id: string | null
+          form_id: string
+          id: string
+          processed: boolean | null
+          submission_data: Json
+        }
+        Insert: {
+          created_at?: string
+          created_case_id?: string | null
+          form_id: string
+          id?: string
+          processed?: boolean | null
+          submission_data?: Json
+        }
+        Update: {
+          created_at?: string
+          created_case_id?: string | null
+          form_id?: string
+          id?: string
+          processed?: boolean | null
+          submission_data?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "builder_io_webhooks_created_case_id_fkey"
+            columns: ["created_case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      case_timeline: {
+        Row: {
+          case_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          stage: string | null
+          status: string | null
+          updated_by: string
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          stage?: string | null
+          status?: string | null
+          updated_by: string
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          stage?: string | null
+          status?: string | null
+          updated_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_timeline_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "case_timeline_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cases: {
+        Row: {
+          assigned_staff_id: string | null
+          case_number: string
+          client_id: string
+          created_at: string
+          current_stage: string | null
+          deadline: string | null
+          id: string
+          priority: string | null
+          status: string
+          updated_at: string
+          visa_type_id: string
+        }
+        Insert: {
+          assigned_staff_id?: string | null
+          case_number: string
+          client_id: string
+          created_at?: string
+          current_stage?: string | null
+          deadline?: string | null
+          id?: string
+          priority?: string | null
+          status?: string
+          updated_at?: string
+          visa_type_id: string
+        }
+        Update: {
+          assigned_staff_id?: string | null
+          case_number?: string
+          client_id?: string
+          created_at?: string
+          current_stage?: string | null
+          deadline?: string | null
+          id?: string
+          priority?: string | null
+          status?: string
+          updated_at?: string
+          visa_type_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cases_assigned_staff_id_fkey"
+            columns: ["assigned_staff_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cases_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cases_visa_type_id_fkey"
+            columns: ["visa_type_id"]
+            isOneToOne: false
+            referencedRelation: "visa_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      consultation_requests: {
+        Row: {
+          assigned_to: string | null
+          country_of_interest: string | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          message: string | null
+          phone: string | null
+          status: string | null
+          visa_type_interest: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          country_of_interest?: string | null
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          message?: string | null
+          phone?: string | null
+          status?: string | null
+          visa_type_interest?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          country_of_interest?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          message?: string | null
+          phone?: string | null
+          status?: string | null
+          visa_type_interest?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultation_requests_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          case_id: string
+          document_category: string | null
+          file_path: string
+          file_size: number | null
+          file_type: string | null
+          id: string
+          name: string
+          status: string | null
+          uploaded_at: string
+          uploaded_by: string
+        }
+        Insert: {
+          case_id: string
+          document_category?: string | null
+          file_path: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          name: string
+          status?: string | null
+          uploaded_at?: string
+          uploaded_by: string
+        }
+        Update: {
+          case_id?: string
+          document_category?: string | null
+          file_path?: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          name?: string
+          status?: string | null
+          uploaded_at?: string
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_submissions: {
+        Row: {
+          case_id: string
+          data: Json
+          form_template_id: string
+          id: string
+          submitted_at: string
+          submitted_by: string
+        }
+        Insert: {
+          case_id: string
+          data?: Json
+          form_template_id: string
+          id?: string
+          submitted_at?: string
+          submitted_by: string
+        }
+        Update: {
+          case_id?: string
+          data?: Json
+          form_template_id?: string
+          id?: string
+          submitted_at?: string
+          submitted_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_submissions_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "form_submissions_form_template_id_fkey"
+            columns: ["form_template_id"]
+            isOneToOne: false
+            referencedRelation: "form_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "form_submissions_submitted_by_fkey"
+            columns: ["submitted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_templates: {
+        Row: {
+          created_at: string
+          fields: Json
+          id: string
+          is_active: boolean | null
+          name: string
+          visa_type_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          fields?: Json
+          id?: string
+          is_active?: boolean | null
+          name: string
+          visa_type_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          fields?: Json
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          visa_type_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_templates_visa_type_id_fkey"
+            columns: ["visa_type_id"]
+            isOneToOne: false
+            referencedRelation: "visa_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          case_id: string
+          created_at: string
+          id: string
+          is_internal: boolean | null
+          message: string
+          read_at: string | null
+          recipient_id: string | null
+          sender_id: string
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          id?: string
+          is_internal?: boolean | null
+          message: string
+          read_at?: string | null
+          recipient_id?: string | null
+          sender_id: string
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          id?: string
+          is_internal?: boolean | null
+          message?: string
+          read_at?: string | null
+          recipient_id?: string | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          case_id: string
+          created_at: string
+          currency: string | null
+          description: string | null
+          id: string
+          paid_at: string | null
+          status: string | null
+          stripe_invoice_id: string | null
+          stripe_payment_intent_id: string | null
+        }
+        Insert: {
+          amount: number
+          case_id: string
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          id?: string
+          paid_at?: string | null
+          status?: string | null
+          stripe_invoice_id?: string | null
+          stripe_payment_intent_id?: string | null
+        }
+        Update: {
+          amount?: number
+          case_id?: string
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          id?: string
+          paid_at?: string | null
+          status?: string | null
+          stripe_invoice_id?: string | null
+          stripe_payment_intent_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      visa_types: {
+        Row: {
+          category: string
+          country: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          processing_time_estimate: string | null
+          requirements: Json | null
+          updated_at: string
+          workflow_stages: Json | null
+        }
+        Insert: {
+          category: string
+          country: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          processing_time_estimate?: string | null
+          requirements?: Json | null
+          updated_at?: string
+          workflow_stages?: Json | null
+        }
+        Update: {
+          category?: string
+          country?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          processing_time_estimate?: string | null
+          requirements?: Json | null
+          updated_at?: string
+          workflow_stages?: Json | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_case_number: { Args: never; Returns: string }
+      has_role: {
+        Args: { role_name: string; user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
