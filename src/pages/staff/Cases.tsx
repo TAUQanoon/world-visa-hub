@@ -197,7 +197,16 @@ export default function Cases() {
       priority: string;
       deadline?: string;
     }) => {
-      const { error } = await supabase.from("cases").insert([newCase]);
+      // Generate case number first
+      const { data: caseNumber, error: caseNumberError } = await supabase
+        .rpc("generate_case_number");
+
+      if (caseNumberError) throw caseNumberError;
+
+      const { error } = await supabase.from("cases").insert([{
+        ...newCase,
+        case_number: caseNumber,
+      }]);
 
       if (error) throw error;
     },
