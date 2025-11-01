@@ -9,7 +9,11 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import { ClientLayout } from "./layouts/ClientLayout";
+import { StaffLayout } from "./layouts/StaffLayout";
+import { AdminLayout } from "./layouts/AdminLayout";
 import ClientDashboard from "./pages/client/Dashboard";
+import StaffDashboard from "./pages/staff/Dashboard";
+import AdminDashboard from "./pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -34,10 +38,44 @@ const App = () => (
               }
             >
               <Route index element={<ClientDashboard />} />
-              <Route path="documents" element={<div>Documents Page (Coming Soon)</div>} />
-              <Route path="messages" element={<div>Messages Page (Coming Soon)</div>} />
-              <Route path="payments" element={<div>Payments Page (Coming Soon)</div>} />
-              <Route path="profile" element={<div>Profile Page (Coming Soon)</div>} />
+              <Route path="documents" element={<div className="text-center py-12 text-muted-foreground">Documents Page (Coming Soon)</div>} />
+              <Route path="messages" element={<div className="text-center py-12 text-muted-foreground">Messages Page (Coming Soon)</div>} />
+              <Route path="payments" element={<div className="text-center py-12 text-muted-foreground">Payments Page (Coming Soon)</div>} />
+              <Route path="profile" element={<div className="text-center py-12 text-muted-foreground">Profile Page (Coming Soon)</div>} />
+            </Route>
+
+            {/* Staff Dashboard Routes */}
+            <Route
+              path="/staff"
+              element={
+                <ProtectedRoute>
+                  <StaffLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<StaffDashboard />} />
+              <Route path="cases" element={<div className="text-center py-12 text-muted-foreground">Cases Management (Coming Soon)</div>} />
+              <Route path="clients" element={<div className="text-center py-12 text-muted-foreground">Clients Database (Coming Soon)</div>} />
+              <Route path="documents" element={<div className="text-center py-12 text-muted-foreground">Document Review (Coming Soon)</div>} />
+              <Route path="messages" element={<div className="text-center py-12 text-muted-foreground">Messages (Coming Soon)</div>} />
+            </Route>
+
+            {/* Admin Dashboard Routes */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="users" element={<div className="text-center py-12 text-muted-foreground">User Management (Coming Soon)</div>} />
+              <Route path="visa-types" element={<div className="text-center py-12 text-muted-foreground">Visa Types Config (Coming Soon)</div>} />
+              <Route path="forms" element={<div className="text-center py-12 text-muted-foreground">Form Templates (Coming Soon)</div>} />
+              <Route path="payments" element={<div className="text-center py-12 text-muted-foreground">Payment Management (Coming Soon)</div>} />
+              <Route path="builder-webhooks" element={<div className="text-center py-12 text-muted-foreground">Builder.io Webhooks (Coming Soon)</div>} />
+              <Route path="settings" element={<div className="text-center py-12 text-muted-foreground">System Settings (Coming Soon)</div>} />
             </Route>
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
