@@ -18,9 +18,11 @@ import ClientPayments from "./pages/client/Payments";
 import ClientProfile from "./pages/client/Profile";
 import StaffDashboard from "./pages/staff/Dashboard";
 import StaffCases from "./pages/staff/Cases";
+import StaffCaseDetail from "./pages/staff/CaseDetail";
 import StaffMessages from "./pages/staff/Messages";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminUsers from "./pages/admin/Users";
+import ClientCaseDetail from "./pages/client/CaseDetail";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +47,7 @@ const App = () => (
               }
             >
               <Route index element={<ClientDashboard />} />
+              <Route path="case/:caseId" element={<ClientCaseDetail />} />
               <Route path="documents" element={<ClientDocuments />} />
               <Route path="messages" element={<ClientMessages />} />
               <Route path="payments" element={<ClientPayments />} />
@@ -62,6 +65,7 @@ const App = () => (
             >
               <Route index element={<StaffDashboard />} />
               <Route path="cases" element={<StaffCases />} />
+              <Route path="case/:caseId" element={<StaffCaseDetail />} />
               <Route path="clients" element={<div className="text-center py-12 text-muted-foreground">Clients Database (Coming Soon)</div>} />
               <Route path="documents" element={<div className="text-center py-12 text-muted-foreground">Document Review (Coming Soon)</div>} />
               <Route path="messages" element={<StaffMessages />} />

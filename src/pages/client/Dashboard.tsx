@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -8,6 +9,7 @@ import { FileText, Clock, CheckCircle2 } from "lucide-react";
 
 export default function ClientDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const { data: profile } = useQuery({
     queryKey: ["profile", user?.id],
@@ -115,7 +117,11 @@ export default function ClientDashboard() {
           ) : cases && cases.length > 0 ? (
             <div className="space-y-4">
               {cases.map((caseItem: any) => (
-                <Card key={caseItem.id}>
+                <Card 
+                  key={caseItem.id} 
+                  className="cursor-pointer hover:bg-muted/50 transition-colors"
+                  onClick={() => navigate(`/portal/case/${caseItem.id}`)}
+                >
                   <CardContent className="pt-6">
                     <div className="flex items-center justify-between">
                       <div>
