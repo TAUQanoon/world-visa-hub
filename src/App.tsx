@@ -18,6 +18,7 @@ import ClientPayments from "./pages/client/Payments";
 import ClientProfile from "./pages/client/Profile";
 import StaffDashboard from "./pages/staff/Dashboard";
 import StaffCases from "./pages/staff/Cases";
+import StaffMessages from "./pages/staff/Messages";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminUsers from "./pages/admin/Users";
 
@@ -63,7 +64,7 @@ const App = () => (
               <Route path="cases" element={<StaffCases />} />
               <Route path="clients" element={<div className="text-center py-12 text-muted-foreground">Clients Database (Coming Soon)</div>} />
               <Route path="documents" element={<div className="text-center py-12 text-muted-foreground">Document Review (Coming Soon)</div>} />
-              <Route path="messages" element={<div className="text-center py-12 text-muted-foreground">Messages (Coming Soon)</div>} />
+              <Route path="messages" element={<StaffMessages />} />
             </Route>
 
             {/* Admin Dashboard Routes */}
