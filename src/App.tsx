@@ -12,6 +12,10 @@ import { ClientLayout } from "./layouts/ClientLayout";
 import { StaffLayout } from "./layouts/StaffLayout";
 import { AdminLayout } from "./layouts/AdminLayout";
 import ClientDashboard from "./pages/client/Dashboard";
+import ClientDocuments from "./pages/client/Documents";
+import ClientMessages from "./pages/client/Messages";
+import ClientPayments from "./pages/client/Payments";
+import ClientProfile from "./pages/client/Profile";
 import StaffDashboard from "./pages/staff/Dashboard";
 import AdminDashboard from "./pages/admin/Dashboard";
 
@@ -38,10 +42,10 @@ const App = () => (
               }
             >
               <Route index element={<ClientDashboard />} />
-              <Route path="documents" element={<div className="text-center py-12 text-muted-foreground">Documents Page (Coming Soon)</div>} />
-              <Route path="messages" element={<div className="text-center py-12 text-muted-foreground">Messages Page (Coming Soon)</div>} />
-              <Route path="payments" element={<div className="text-center py-12 text-muted-foreground">Payments Page (Coming Soon)</div>} />
-              <Route path="profile" element={<div className="text-center py-12 text-muted-foreground">Profile Page (Coming Soon)</div>} />
+              <Route path="documents" element={<ClientDocuments />} />
+              <Route path="messages" element={<ClientMessages />} />
+              <Route path="payments" element={<ClientPayments />} />
+              <Route path="profile" element={<ClientProfile />} />
             </Route>
 
             {/* Staff Dashboard Routes */}
