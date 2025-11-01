@@ -18,6 +18,7 @@ import ClientPayments from "./pages/client/Payments";
 import ClientProfile from "./pages/client/Profile";
 import StaffDashboard from "./pages/staff/Dashboard";
 import AdminDashboard from "./pages/admin/Dashboard";
+import AdminUsers from "./pages/admin/Users";
 
 const queryClient = new QueryClient();
 
@@ -74,7 +75,7 @@ const App = () => (
               }
             >
               <Route index element={<AdminDashboard />} />
-              <Route path="users" element={<div className="text-center py-12 text-muted-foreground">User Management (Coming Soon)</div>} />
+              <Route path="users" element={<AdminUsers />} />
               <Route path="visa-types" element={<div className="text-center py-12 text-muted-foreground">Visa Types Config (Coming Soon)</div>} />
               <Route path="forms" element={<div className="text-center py-12 text-muted-foreground">Form Templates (Coming Soon)</div>} />
               <Route path="payments" element={<div className="text-center py-12 text-muted-foreground">Payment Management (Coming Soon)</div>} />
