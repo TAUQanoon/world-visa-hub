@@ -14,6 +14,93 @@ export type Database = {
   }
   public: {
     Tables: {
+      builder_analytics: {
+        Row: {
+          created_at: string | null
+          event_type: string
+          id: string
+          metadata: Json | null
+          page_url: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          page_url?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          page_url?: string | null
+        }
+        Relationships: []
+      }
+      builder_content: {
+        Row: {
+          content_id: string
+          created_at: string | null
+          data: Json
+          id: string
+          model: string
+          published: boolean | null
+          updated_at: string | null
+          url_path: string
+        }
+        Insert: {
+          content_id: string
+          created_at?: string | null
+          data?: Json
+          id?: string
+          model: string
+          published?: boolean | null
+          updated_at?: string | null
+          url_path: string
+        }
+        Update: {
+          content_id?: string
+          created_at?: string | null
+          data?: Json
+          id?: string
+          model?: string
+          published?: boolean | null
+          updated_at?: string | null
+          url_path?: string
+        }
+        Relationships: []
+      }
+      builder_forms: {
+        Row: {
+          created_at: string | null
+          form_name: string
+          id: string
+          processed: boolean | null
+          submission_data: Json
+          submitted_at: string | null
+          user_email: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          form_name: string
+          id?: string
+          processed?: boolean | null
+          submission_data?: Json
+          submitted_at?: string | null
+          user_email?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          form_name?: string
+          id?: string
+          processed?: boolean | null
+          submission_data?: Json
+          submitted_at?: string | null
+          user_email?: string | null
+        }
+        Relationships: []
+      }
       builder_io_webhooks: {
         Row: {
           created_at: string
@@ -48,6 +135,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      builder_webhook_logs: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          event_type: string
+          id: string
+          payload: Json
+          status: string
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          event_type: string
+          id?: string
+          payload?: Json
+          status: string
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          event_type?: string
+          id?: string
+          payload?: Json
+          status?: string
+        }
+        Relationships: []
       }
       case_timeline: {
         Row: {
