@@ -1,14 +1,21 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FileText, Download, Upload, Clock, CheckCircle2, XCircle } from "lucide-react";
+import DocumentUploadDialog from "@/components/documents/DocumentUploadDialog";
+import { downloadDocument } from "@/lib/documentHelpers";
 
 export default function ClientDocuments() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [selectedCaseId, setSelectedCaseId] = useState<string>("");
 
   const { data: documents, isLoading } = useQuery({
     queryKey: ["my-documents", user?.id],
@@ -19,6 +26,7 @@ export default function ClientDocuments() {
         .select(`
           *,
           cases (
+            id,
             case_number,
             visa_types (
               name,
@@ -28,6 +36,20 @@ export default function ClientDocuments() {
         `)
         .eq("uploaded_by", user.id)
         .order("uploaded_at", { ascending: false });
+      return data || [];
+    },
+    enabled: !!user,
+  });
+
+  const { data: userCases } = useQuery({
+    queryKey: ["user-cases", user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data } = await supabase
+        .from("cases")
+        .select("id, case_number, visa_types(name)")
+        .eq("client_id", user.id)
+        .order("created_at", { ascending: false });
       return data || [];
     },
     enabled: !!user,
@@ -62,10 +84,24 @@ export default function ClientDocuments() {
             Manage your case documents
           </p>
         </div>
-        <Button>
-          <Upload className="mr-2 h-4 w-4" />
-          Upload Document
-        </Button>
+        <div className="flex gap-2 items-center">
+          <Select value={selectedCaseId} onValueChange={setSelectedCaseId}>
+            <SelectTrigger className="w-[250px]">
+              <SelectValue placeholder="Select a case" />
+            </SelectTrigger>
+            <SelectContent>
+              {userCases?.map((c: any) => (
+                <SelectItem key={c.id} value={c.id}>
+                  {c.case_number} - {c.visa_types?.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button onClick={() => setUploadDialogOpen(true)} disabled={!selectedCaseId}>
+            <Upload className="mr-2 h-4 w-4" />
+            Upload
+          </Button>
+        </div>
       </div>
 
       <Card>
@@ -110,7 +146,11 @@ export default function ClientDocuments() {
                             {doc.status.replace("_", " ")}
                           </span>
                         </Badge>
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => downloadDocument(doc.file_path, doc.name)}
+                        >
                           <Download className="h-4 w-4" />
                         </Button>
                       </div>
@@ -128,6 +168,16 @@ export default function ClientDocuments() {
           )}
         </CardContent>
       </Card>
+
+      <DocumentUploadDialog
+        caseId={selectedCaseId}
+        open={uploadDialogOpen}
+        onOpenChange={setUploadDialogOpen}
+        onUploadComplete={() => {
+          queryClient.invalidateQueries({ queryKey: ["my-documents"] });
+          setSelectedCaseId("");
+        }}
+      />
     </div>
   );
 }

@@ -167,12 +167,12 @@ export default function StaffCaseDetail() {
             </TabsList>
 
             <TabsContent value="overview" className="space-y-6">
-              <DocumentsSection documents={documents || []} isLoading={documentsLoading} />
+              <DocumentsSection caseId={caseId!} documents={documents || []} isLoading={documentsLoading} />
               <PaymentsSection payments={payments || []} isLoading={paymentsLoading} />
             </TabsContent>
 
             <TabsContent value="documents">
-              <DocumentsSection documents={documents || []} isLoading={documentsLoading} />
+              <DocumentsSection caseId={caseId!} documents={documents || []} isLoading={documentsLoading} />
             </TabsContent>
 
             <TabsContent value="messages">

@@ -156,14 +156,14 @@ export default function ClientCaseDetail() {
 
         <TabsContent value="overview" className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
-            <DocumentsSection documents={documents || []} isLoading={documentsLoading} />
+            <DocumentsSection caseId={caseId!} documents={documents || []} isLoading={documentsLoading} />
             <PaymentsSection payments={payments || []} isLoading={paymentsLoading} />
           </div>
           <ActivityTimeline events={timeline || []} isLoading={timelineLoading} />
         </TabsContent>
 
         <TabsContent value="documents">
-          <DocumentsSection documents={documents || []} isLoading={documentsLoading} />
+          <DocumentsSection caseId={caseId!} documents={documents || []} isLoading={documentsLoading} />
         </TabsContent>
 
         <TabsContent value="messages">
