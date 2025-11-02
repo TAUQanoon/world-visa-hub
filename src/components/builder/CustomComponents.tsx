@@ -1,11 +1,16 @@
-import { Builder } from '@builder.io/react';
+// Custom components for Builder.io
+// Note: These are React components that will be used in the app
+// To register them in Builder.io dashboard, you'll need to:
+// 1. Go to your Builder.io Models settings
+// 2. Add custom components with these specifications
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useBuilderAnalytics } from '@/hooks/useBuilderAnalytics';
 
 // Custom CTA Button Component
-const CTAButton = ({ text, href, variant = 'default' }: any) => {
+export const CTAButton = ({ text, href, variant = 'default' }: any) => {
   const { trackButtonClick } = useBuilderAnalytics(window.location.pathname);
 
   const handleClick = () => {
@@ -23,22 +28,8 @@ const CTAButton = ({ text, href, variant = 'default' }: any) => {
   );
 };
 
-Builder.registerComponent(CTAButton, {
-  name: 'CTAButton',
-  inputs: [
-    { name: 'text', type: 'string', defaultValue: 'Click Me', required: true },
-    { name: 'href', type: 'string', helperText: 'Optional link URL' },
-    {
-      name: 'variant',
-      type: 'string',
-      enum: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
-      defaultValue: 'default',
-    },
-  ],
-});
-
 // Service Card Component
-const ServiceCard = ({ title, description, icon }: any) => {
+export const ServiceCard = ({ title, description, icon }: any) => {
   return (
     <Card>
       <CardHeader>
@@ -52,17 +43,8 @@ const ServiceCard = ({ title, description, icon }: any) => {
   );
 };
 
-Builder.registerComponent(ServiceCard, {
-  name: 'ServiceCard',
-  inputs: [
-    { name: 'title', type: 'string', defaultValue: 'Service Title', required: true },
-    { name: 'description', type: 'longText', defaultValue: 'Service description goes here' },
-    { name: 'icon', type: 'string', helperText: 'Emoji or icon character' },
-  ],
-});
-
 // FAQ Accordion Component
-const FAQAccordion = ({ items }: any) => {
+export const FAQAccordion = ({ items }: any) => {
   return (
     <Accordion type="single" collapsible className="w-full">
       {items?.map((item: any, index: number) => (
@@ -75,25 +57,8 @@ const FAQAccordion = ({ items }: any) => {
   );
 };
 
-Builder.registerComponent(FAQAccordion, {
-  name: 'FAQAccordion',
-  inputs: [
-    {
-      name: 'items',
-      type: 'list',
-      defaultValue: [
-        { question: 'What is your question?', answer: 'This is the answer.' },
-      ],
-      subFields: [
-        { name: 'question', type: 'string', required: true },
-        { name: 'answer', type: 'longText', required: true },
-      ],
-    },
-  ],
-});
-
 // Testimonial Block Component
-const TestimonialBlock = ({ quote, author, role, image }: any) => {
+export const TestimonialBlock = ({ quote, author, role, image }: any) => {
   return (
     <Card>
       <CardContent className="pt-6">
@@ -118,18 +83,8 @@ const TestimonialBlock = ({ quote, author, role, image }: any) => {
   );
 };
 
-Builder.registerComponent(TestimonialBlock, {
-  name: 'TestimonialBlock',
-  inputs: [
-    { name: 'quote', type: 'longText', required: true },
-    { name: 'author', type: 'string', required: true },
-    { name: 'role', type: 'string' },
-    { name: 'image', type: 'file', allowedFileTypes: ['jpeg', 'png', 'webp'] },
-  ],
-});
-
 // Stats Counter Component
-const StatsCounter = ({ number, label, suffix = '' }: any) => {
+export const StatsCounter = ({ number, label, suffix = '' }: any) => {
   return (
     <div className="text-center">
       <div className="text-4xl font-bold text-primary">
@@ -141,17 +96,67 @@ const StatsCounter = ({ number, label, suffix = '' }: any) => {
   );
 };
 
-Builder.registerComponent(StatsCounter, {
-  name: 'StatsCounter',
-  inputs: [
-    { name: 'number', type: 'number', required: true },
-    { name: 'label', type: 'string', required: true },
-    { name: 'suffix', type: 'string', helperText: 'e.g., +, %, K' },
-  ],
-});
+// Export for registration info
+export const BUILDER_CUSTOM_COMPONENTS = [
+  {
+    name: 'CTAButton',
+    component: CTAButton,
+    inputs: [
+      { name: 'text', type: 'string', defaultValue: 'Click Me', required: true },
+      { name: 'href', type: 'string', helperText: 'Optional link URL' },
+      {
+        name: 'variant',
+        type: 'string',
+        enum: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
+        defaultValue: 'default',
+      },
+    ],
+  },
+  {
+    name: 'ServiceCard',
+    component: ServiceCard,
+    inputs: [
+      { name: 'title', type: 'string', defaultValue: 'Service Title', required: true },
+      { name: 'description', type: 'longText', defaultValue: 'Service description' },
+      { name: 'icon', type: 'string', helperText: 'Emoji or icon' },
+    ],
+  },
+  {
+    name: 'FAQAccordion',
+    component: FAQAccordion,
+    inputs: [
+      {
+        name: 'items',
+        type: 'list',
+        defaultValue: [{ question: 'Question?', answer: 'Answer.' }],
+        subFields: [
+          { name: 'question', type: 'string', required: true },
+          { name: 'answer', type: 'longText', required: true },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'TestimonialBlock',
+    component: TestimonialBlock,
+    inputs: [
+      { name: 'quote', type: 'longText', required: true },
+      { name: 'author', type: 'string', required: true },
+      { name: 'role', type: 'string' },
+      { name: 'image', type: 'file', allowedFileTypes: ['jpeg', 'png', 'webp'] },
+    ],
+  },
+  {
+    name: 'StatsCounter',
+    component: StatsCounter,
+    inputs: [
+      { name: 'number', type: 'number', required: true },
+      { name: 'label', type: 'string', required: true },
+      { name: 'suffix', type: 'string', helperText: 'e.g., +, %, K' },
+    ],
+  },
+];
 
-// Export for registration
 export const registerCustomComponents = () => {
-  // Components are registered on import
-  console.log('Builder.io custom components registered');
+  console.log('Custom components available for Builder.io:', BUILDER_CUSTOM_COMPONENTS.map(c => c.name));
 };

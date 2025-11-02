@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Builder } from '@builder.io/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -18,7 +17,7 @@ const contactFormSchema = z.object({
   message: z.string().min(10, 'Message must be at least 10 characters').max(1000),
 });
 
-const ContactForm = ({ formName = 'Contact Form', submitButtonText = 'Submit' }: any) => {
+export const ContactForm = ({ formName = 'Contact Form', submitButtonText = 'Submit' }: any) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const { trackFormSubmit } = useBuilderAnalytics(window.location.pathname);
@@ -136,13 +135,3 @@ const ContactForm = ({ formName = 'Contact Form', submitButtonText = 'Submit' }:
     </Form>
   );
 };
-
-Builder.registerComponent(ContactForm, {
-  name: 'ContactForm',
-  inputs: [
-    { name: 'formName', type: 'string', defaultValue: 'Contact Form' },
-    { name: 'submitButtonText', type: 'string', defaultValue: 'Submit' },
-  ],
-});
-
-export { ContactForm };

@@ -1,6 +1,5 @@
-import { BuilderComponent, builder } from '@builder.io/react';
 import { useEffect, useState } from 'react';
-import { builderApiKey } from '@/lib/builder';
+import { fetchBuilderContent } from '@/lib/builder';
 import { useBuilderAnalytics } from '@/hooks/useBuilderAnalytics';
 import { BuilderSEO } from './BuilderSEO';
 
@@ -22,15 +21,10 @@ export function BuilderPage({ model = 'page', content }: BuilderPageProps) {
 
     const fetchContent = async () => {
       try {
-        const content = await builder
-          .get(model, {
-            url: currentUrl,
-            apiKey: builderApiKey,
-          })
-          .promise();
+        const fetchedContent = await fetchBuilderContent(model, currentUrl);
 
-        if (content) {
-          setPageContent(content);
+        if (fetchedContent) {
+          setPageContent(fetchedContent);
           setNotFound(false);
         } else {
           setNotFound(true);
@@ -61,7 +55,19 @@ export function BuilderPage({ model = 'page', content }: BuilderPageProps) {
   return (
     <>
       <BuilderSEO content={pageContent} />
-      <BuilderComponent model={model} content={pageContent} />
+      <div className="builder-content">
+        {pageContent.data?.html && (
+          <div dangerouslySetInnerHTML={{ __html: pageContent.data.html }} />
+        )}
+        {!pageContent.data?.html && pageContent.data?.blocks && (
+          <div>
+            {/* Simple fallback rendering for blocks */}
+            <pre className="p-4 bg-muted text-xs overflow-auto">
+              {JSON.stringify(pageContent.data.blocks, null, 2)}
+            </pre>
+          </div>
+        )}
+      </div>
     </>
   );
 }
