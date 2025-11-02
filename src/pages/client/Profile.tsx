@@ -1,166 +1,200 @@
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/hooks/use-toast";
-import { User } from "lucide-react";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { ClientProfileForm } from "@/components/client-profile/ClientProfileForm";
+import { TravelHistoryList } from "@/components/client-profile/TravelHistoryList";
 
 export default function ClientProfile() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [activeTab, setActiveTab] = useState("basic");
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
 
-  const { data: profile, isLoading } = useQuery({
+  const { data: profile, isLoading: profileLoading } = useQuery({
     queryKey: ["profile", user?.id],
     queryFn: async () => {
-      if (!user) return null;
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("profiles")
         .select("*")
-        .eq("id", user.id)
+        .eq("id", user!.id)
         .single();
+      
+      if (error) throw error;
       return data;
     },
     enabled: !!user,
   });
 
-  const [formData, setFormData] = useState({
-    full_name: "",
-    phone: "",
+  const { data: clientProfile, isLoading: clientProfileLoading } = useQuery({
+    queryKey: ["client-profile", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("client_profiles")
+        .select("*")
+        .eq("id", user!.id)
+        .maybeSingle();
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user,
   });
 
-  // Update form when profile loads
-  useState(() => {
+  useEffect(() => {
     if (profile) {
-      setFormData({
-        full_name: profile.full_name || "",
-        phone: profile.phone || "",
-      });
+      setFullName(profile.full_name || "");
+      setPhone(profile.phone || "");
     }
-  });
+  }, [profile]);
 
-  const updateProfile = useMutation({
-    mutationFn: async (data: typeof formData) => {
-      if (!user) throw new Error("No user");
+  const updateBasicProfile = useMutation({
+    mutationFn: async (data: { full_name: string; phone: string }) => {
       const { error } = await supabase
         .from("profiles")
         .update(data)
-        .eq("id", user.id);
+        .eq("id", user!.id);
+      
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["profile", user?.id] });
-      toast({
-        title: "Profile updated",
-        description: "Your profile has been updated successfully.",
-      });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      toast({ title: "Profile updated successfully" });
     },
     onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to update profile. Please try again.",
-        variant: "destructive",
-      });
+      toast({ title: "Failed to update profile", variant: "destructive" });
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const saveClientProfile = useMutation({
+    mutationFn: async (data: any) => {
+      if (clientProfile) {
+        const { error } = await supabase
+          .from("client_profiles")
+          .update(data)
+          .eq("id", user!.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from("client_profiles")
+          .insert([{ ...data, id: user!.id }]);
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["client-profile"] });
+      toast({ title: "Profile updated successfully" });
+    },
+    onError: () => {
+      toast({ title: "Failed to update profile", variant: "destructive" });
+    },
+  });
+
+  const handleBasicUpdate = (e: React.FormEvent) => {
     e.preventDefault();
-    updateProfile.mutate(formData);
+    updateBasicProfile.mutate({ full_name: fullName, phone });
   };
 
-  if (isLoading) {
+  if (profileLoading || clientProfileLoading) {
     return (
-      <div className="space-y-6">
-        <Skeleton className="h-12 w-64" />
-        <Skeleton className="h-96 w-full" />
+      <div className="flex items-center justify-center h-96">
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Profile</h1>
-        <p className="text-muted-foreground mt-2">
-          Manage your personal information
-        </p>
-      </div>
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-8">My Profile</h1>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Personal Information</CardTitle>
-          <CardDescription>Update your profile details</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={profile?.email || ""}
-                disabled
-              />
-              <p className="text-xs text-muted-foreground">
-                Email cannot be changed
-              </p>
-            </div>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList>
+          <TabsTrigger value="basic">Basic Info</TabsTrigger>
+          <TabsTrigger value="extended">Personal Details</TabsTrigger>
+          <TabsTrigger value="travel">Travel History</TabsTrigger>
+        </TabsList>
 
-            <div className="space-y-2">
-              <Label htmlFor="full_name">Full Name</Label>
-              <Input
-                id="full_name"
-                value={formData.full_name}
-                onChange={(e) =>
-                  setFormData({ ...formData, full_name: e.target.value })
-                }
-              />
-            </div>
+        <TabsContent value="basic" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Basic Information</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleBasicUpdate} className="space-y-4">
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" value={profile?.email || ""} disabled />
+                </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
-              <Input
-                id="phone"
-                type="tel"
-                value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
-              />
-            </div>
+                <div>
+                  <Label htmlFor="full_name">Full Name</Label>
+                  <Input
+                    id="full_name"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                  />
+                </div>
 
-            <Button type="submit" disabled={updateProfile.isPending}>
-              {updateProfile.isPending ? "Saving..." : "Save Changes"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+                <div>
+                  <Label htmlFor="phone">Phone</Label>
+                  <Input
+                    id="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Account Information</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-4">
-            <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-              <User className="h-8 w-8 text-primary" />
-            </div>
-            <div>
-              <p className="font-semibold">{profile?.full_name || "User"}</p>
-              <p className="text-sm text-muted-foreground">{profile?.email}</p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Member since {new Date(profile?.created_at).toLocaleDateString()}
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+                <Button type="submit" disabled={updateBasicProfile.isPending}>
+                  {updateBasicProfile.isPending && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Save Changes
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="extended" className="mt-6">
+          <ClientProfileForm
+            defaultValues={clientProfile ? {
+              date_of_birth: clientProfile.date_of_birth || undefined,
+              place_of_birth: clientProfile.place_of_birth || undefined,
+              nationality: clientProfile.nationality || undefined,
+              passport_number: clientProfile.passport_number || undefined,
+              passport_issue_date: clientProfile.passport_issue_date || undefined,
+              passport_expiry_date: clientProfile.passport_expiry_date || undefined,
+              passport_issuing_country: clientProfile.passport_issuing_country || undefined,
+              gender: (clientProfile.gender as "male" | "female" | "other" | "prefer_not_to_say") || undefined,
+              marital_status: (clientProfile.marital_status as "single" | "married" | "divorced" | "widowed" | "separated") || undefined,
+              address_line1: clientProfile.address_line1 || undefined,
+              address_line2: clientProfile.address_line2 || undefined,
+              city: clientProfile.city || undefined,
+              state_province: clientProfile.state_province || undefined,
+              postal_code: clientProfile.postal_code || undefined,
+              country: clientProfile.country || undefined,
+              emergency_contact_name: clientProfile.emergency_contact_name || undefined,
+              emergency_contact_phone: clientProfile.emergency_contact_phone || undefined,
+              emergency_contact_relationship: clientProfile.emergency_contact_relationship || undefined,
+            } : {}}
+            onSubmit={async (data) => saveClientProfile.mutate(data)}
+            isLoading={saveClientProfile.isPending}
+          />
+        </TabsContent>
+
+        <TabsContent value="travel" className="mt-6">
+          <TravelHistoryList />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

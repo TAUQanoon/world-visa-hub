@@ -158,6 +158,321 @@ export type Database = {
           },
         ]
       }
+      client_education: {
+        Row: {
+          city: string | null
+          client_id: string
+          country: string
+          created_at: string | null
+          degree_level: string | null
+          end_date: string | null
+          field_of_study: string | null
+          gpa_or_grade: string | null
+          id: string
+          institution_name: string
+          is_current: boolean | null
+          start_date: string
+        }
+        Insert: {
+          city?: string | null
+          client_id: string
+          country: string
+          created_at?: string | null
+          degree_level?: string | null
+          end_date?: string | null
+          field_of_study?: string | null
+          gpa_or_grade?: string | null
+          id?: string
+          institution_name: string
+          is_current?: boolean | null
+          start_date: string
+        }
+        Update: {
+          city?: string | null
+          client_id?: string
+          country?: string
+          created_at?: string | null
+          degree_level?: string | null
+          end_date?: string | null
+          field_of_study?: string | null
+          gpa_or_grade?: string | null
+          id?: string
+          institution_name?: string
+          is_current?: boolean | null
+          start_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_education_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_employment: {
+        Row: {
+          city: string | null
+          client_id: string
+          country: string
+          created_at: string | null
+          employer_name: string
+          end_date: string | null
+          id: string
+          industry: string | null
+          is_current: boolean | null
+          job_description: string | null
+          job_title: string
+          start_date: string
+        }
+        Insert: {
+          city?: string | null
+          client_id: string
+          country: string
+          created_at?: string | null
+          employer_name: string
+          end_date?: string | null
+          id?: string
+          industry?: string | null
+          is_current?: boolean | null
+          job_description?: string | null
+          job_title: string
+          start_date: string
+        }
+        Update: {
+          city?: string | null
+          client_id?: string
+          country?: string
+          created_at?: string | null
+          employer_name?: string
+          end_date?: string | null
+          id?: string
+          industry?: string | null
+          is_current?: boolean | null
+          job_description?: string | null
+          job_title?: string
+          start_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_employment_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_family_members: {
+        Row: {
+          client_id: string
+          created_at: string | null
+          date_of_birth: string
+          full_name: string
+          id: string
+          is_accompanying: boolean | null
+          nationality: string | null
+          passport_number: string | null
+          relationship: string | null
+        }
+        Insert: {
+          client_id: string
+          created_at?: string | null
+          date_of_birth: string
+          full_name: string
+          id?: string
+          is_accompanying?: boolean | null
+          nationality?: string | null
+          passport_number?: string | null
+          relationship?: string | null
+        }
+        Update: {
+          client_id?: string
+          created_at?: string | null
+          date_of_birth?: string
+          full_name?: string
+          id?: string
+          is_accompanying?: boolean | null
+          nationality?: string | null
+          passport_number?: string | null
+          relationship?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_family_members_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_languages: {
+        Row: {
+          client_id: string
+          created_at: string | null
+          id: string
+          language: string
+          proficiency_level: string | null
+          test_date: string | null
+          test_name: string | null
+          test_score: string | null
+        }
+        Insert: {
+          client_id: string
+          created_at?: string | null
+          id?: string
+          language: string
+          proficiency_level?: string | null
+          test_date?: string | null
+          test_name?: string | null
+          test_score?: string | null
+        }
+        Update: {
+          client_id?: string
+          created_at?: string | null
+          id?: string
+          language?: string
+          proficiency_level?: string | null
+          test_date?: string | null
+          test_name?: string | null
+          test_score?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_languages_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_profiles: {
+        Row: {
+          address_line1: string | null
+          address_line2: string | null
+          city: string | null
+          country: string | null
+          created_at: string | null
+          date_of_birth: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          emergency_contact_relationship: string | null
+          gender: string | null
+          id: string
+          marital_status: string | null
+          nationality: string | null
+          passport_expiry_date: string | null
+          passport_issue_date: string | null
+          passport_issuing_country: string | null
+          passport_number: string | null
+          place_of_birth: string | null
+          postal_code: string | null
+          state_province: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          address_line1?: string | null
+          address_line2?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relationship?: string | null
+          gender?: string | null
+          id: string
+          marital_status?: string | null
+          nationality?: string | null
+          passport_expiry_date?: string | null
+          passport_issue_date?: string | null
+          passport_issuing_country?: string | null
+          passport_number?: string | null
+          place_of_birth?: string | null
+          postal_code?: string | null
+          state_province?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          address_line1?: string | null
+          address_line2?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relationship?: string | null
+          gender?: string | null
+          id?: string
+          marital_status?: string | null
+          nationality?: string | null
+          passport_expiry_date?: string | null
+          passport_issue_date?: string | null
+          passport_issuing_country?: string | null
+          passport_number?: string | null
+          place_of_birth?: string | null
+          postal_code?: string | null
+          state_province?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_travel_history: {
+        Row: {
+          client_id: string
+          country: string
+          created_at: string | null
+          entry_date: string
+          exit_date: string
+          id: string
+          notes: string | null
+          purpose: string | null
+          visa_type: string | null
+        }
+        Insert: {
+          client_id: string
+          country: string
+          created_at?: string | null
+          entry_date: string
+          exit_date: string
+          id?: string
+          notes?: string | null
+          purpose?: string | null
+          visa_type?: string | null
+        }
+        Update: {
+          client_id?: string
+          country?: string
+          created_at?: string | null
+          entry_date?: string
+          exit_date?: string
+          id?: string
+          notes?: string | null
+          purpose?: string | null
+          visa_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_travel_history_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       consultation_requests: {
         Row: {
           assigned_to: string | null
