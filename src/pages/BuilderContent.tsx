@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
 import { BuilderPage } from '@/components/builder/BuilderPage';
-import { builderApiKey, isBuilderPreview } from '@/lib/builder';
+import { builder } from '@builder.io/react';
 
 export default function BuilderContent() {
   const location = useLocation();
@@ -9,24 +9,20 @@ export default function BuilderContent() {
 
   useEffect(() => {
     const checkContent = async () => {
-      // Always render in preview mode
-      if (isBuilderPreview()) {
+      // Always render in preview/edit mode
+      if (builder.isPreviewing() || builder.isEditing()) {
         setShouldRender(true);
         return;
       }
 
       try {
-        // Check if content exists for this URL
-        const url = `https://cdn.builder.io/api/v3/content/page?apiKey=${builderApiKey}&url=${encodeURIComponent(location.pathname)}`;
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-          setShouldRender(false);
-          return;
-        }
-
-        const data = await response.json();
-        const content = data.results?.[0];
+        const content = await builder
+          .get('page', {
+            userAttributes: {
+              urlPath: location.pathname,
+            },
+          })
+          .promise();
 
         setShouldRender(!!content);
       } catch (error) {
@@ -38,7 +34,6 @@ export default function BuilderContent() {
     checkContent();
   }, [location.pathname]);
 
-  // Show loading state while checking
   if (shouldRender === null) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -47,11 +42,9 @@ export default function BuilderContent() {
     );
   }
 
-  // If content exists or in preview mode, render Builder.io page
   if (shouldRender) {
     return <BuilderPage />;
   }
 
-  // If no content found, redirect to 404
   return <Navigate to="/404" replace />;
 }
