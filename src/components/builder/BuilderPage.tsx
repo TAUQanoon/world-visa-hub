@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import DOMPurify from 'dompurify';
 import { fetchBuilderContent } from '@/lib/builder';
 import { useBuilderAnalytics } from '@/hooks/useBuilderAnalytics';
 import { BuilderSEO } from './BuilderSEO';
@@ -57,7 +58,14 @@ export function BuilderPage({ model = 'page', content }: BuilderPageProps) {
       <BuilderSEO content={pageContent} />
       <div className="builder-content">
         {pageContent.data?.html && (
-          <div dangerouslySetInnerHTML={{ __html: pageContent.data.html }} />
+          <div 
+            dangerouslySetInnerHTML={{ 
+              __html: DOMPurify.sanitize(pageContent.data.html, {
+                ALLOWED_TAGS: ['p', 'div', 'span', 'img', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'br', 'strong', 'em', 'u', 'section', 'article', 'header', 'footer', 'nav', 'button', 'form', 'input', 'label', 'textarea', 'select', 'option'],
+                ALLOWED_ATTR: ['href', 'src', 'alt', 'class', 'id', 'style', 'target', 'rel', 'type', 'placeholder', 'name', 'value', 'data-*']
+              })
+            }} 
+          />
         )}
         {!pageContent.data?.html && pageContent.data?.blocks && (
           <div>
