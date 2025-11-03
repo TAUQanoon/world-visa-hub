@@ -1,31 +1,34 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
 import { BuilderPage } from '@/components/builder/BuilderPage';
-import { supabase } from '@/integrations/supabase/client';
+import { builder, Builder } from '@builder.io/react';
 
 export default function BuilderContent() {
   const location = useLocation();
-  const [contentExists, setContentExists] = useState<boolean | null>(null);
+  const [shouldRender, setShouldRender] = useState<boolean | null>(null);
 
   useEffect(() => {
     const checkContent = async () => {
+      // Always render in preview/edit mode
+      if (Builder.isPreviewing || Builder.isEditing) {
+        setShouldRender(true);
+        return;
+      }
+
       try {
-        // Check if this URL path has content in our database
-        const { data, error } = await supabase
-          .from('builder_content')
-          .select('id')
-          .eq('url_path', location.pathname)
-          .eq('published', true)
-          .single();
+        // Check if content exists for this URL using Builder SDK
+        const content = await builder
+          .get('page', {
+            userAttributes: {
+              urlPath: location.pathname,
+            },
+          })
+          .promise();
 
-        if (error && error.code !== 'PGRST116') {
-          console.error('Error checking content:', error);
-        }
-
-        setContentExists(!!data);
+        setShouldRender(!!content);
       } catch (error) {
         console.error('Error checking Builder.io content:', error);
-        setContentExists(false);
+        setShouldRender(false);
       }
     };
 
@@ -33,7 +36,7 @@ export default function BuilderContent() {
   }, [location.pathname]);
 
   // Show loading state while checking
-  if (contentExists === null) {
+  if (shouldRender === null) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -41,8 +44,8 @@ export default function BuilderContent() {
     );
   }
 
-  // If content exists, render Builder.io page
-  if (contentExists) {
+  // If content exists or in preview mode, render Builder.io page
+  if (shouldRender) {
     return <BuilderPage />;
   }
 

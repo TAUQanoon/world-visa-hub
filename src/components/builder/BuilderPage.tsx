@@ -1,31 +1,34 @@
+import { BuilderComponent, builder, Builder } from '@builder.io/react';
 import { useEffect, useState } from 'react';
-import DOMPurify from 'dompurify';
-import { fetchBuilderContent } from '@/lib/builder';
 import { useBuilderAnalytics } from '@/hooks/useBuilderAnalytics';
 import { BuilderSEO } from './BuilderSEO';
 
 interface BuilderPageProps {
   model?: string;
-  content?: any;
 }
 
-export function BuilderPage({ model = 'page', content }: BuilderPageProps) {
-  const [pageContent, setPageContent] = useState(content);
-  const [loading, setLoading] = useState(!content);
+export function BuilderPage({ model = 'page' }: BuilderPageProps) {
+  const [content, setContent] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const currentUrl = window.location.pathname;
   
   useBuilderAnalytics(currentUrl);
 
   useEffect(() => {
-    if (content) return;
-
     const fetchContent = async () => {
       try {
-        const fetchedContent = await fetchBuilderContent(model, currentUrl);
+        // Fetch content using Builder SDK
+        const fetchedContent = await builder
+          .get(model, {
+            userAttributes: {
+              urlPath: currentUrl,
+            },
+          })
+          .promise();
 
         if (fetchedContent) {
-          setPageContent(fetchedContent);
+          setContent(fetchedContent);
           setNotFound(false);
         } else {
           setNotFound(true);
@@ -39,8 +42,9 @@ export function BuilderPage({ model = 'page', content }: BuilderPageProps) {
     };
 
     fetchContent();
-  }, [currentUrl, model, content]);
+  }, [currentUrl, model]);
 
+  // Show loading state
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -49,33 +53,22 @@ export function BuilderPage({ model = 'page', content }: BuilderPageProps) {
     );
   }
 
-  if (notFound || !pageContent) {
+  // Always render BuilderComponent for preview/edit mode or if content exists
+  if (Builder.isPreviewing || Builder.isEditing || content) {
+    return (
+      <>
+        {content && <BuilderSEO content={content} />}
+        <BuilderComponent 
+          model={model} 
+          content={content}
+        />
+      </>
+    );
+  }
+
+  if (notFound) {
     return null; // Let App.tsx handle 404
   }
 
-  return (
-    <>
-      <BuilderSEO content={pageContent} />
-      <div className="builder-content">
-        {pageContent.data?.html && (
-          <div 
-            dangerouslySetInnerHTML={{ 
-              __html: DOMPurify.sanitize(pageContent.data.html, {
-                ALLOWED_TAGS: ['p', 'div', 'span', 'img', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'br', 'strong', 'em', 'u', 'section', 'article', 'header', 'footer', 'nav', 'button', 'form', 'input', 'label', 'textarea', 'select', 'option'],
-                ALLOWED_ATTR: ['href', 'src', 'alt', 'class', 'id', 'style', 'target', 'rel', 'type', 'placeholder', 'name', 'value', 'data-*']
-              })
-            }} 
-          />
-        )}
-        {!pageContent.data?.html && pageContent.data?.blocks && (
-          <div>
-            {/* Simple fallback rendering for blocks */}
-            <pre className="p-4 bg-muted text-xs overflow-auto">
-              {JSON.stringify(pageContent.data.blocks, null, 2)}
-            </pre>
-          </div>
-        )}
-      </div>
-    </>
-  );
+  return null;
 }
