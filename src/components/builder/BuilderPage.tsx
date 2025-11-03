@@ -1,5 +1,6 @@
-import { BuilderComponent, builder, Builder } from '@builder.io/react';
 import { useEffect, useState } from 'react';
+import { Content, isPreviewing } from '@builder.io/sdk-react';
+import { fetchBuilderContent, builderApiKey } from '@/lib/builder';
 import { useBuilderAnalytics } from '@/hooks/useBuilderAnalytics';
 import { BuilderSEO } from './BuilderSEO';
 
@@ -18,14 +19,7 @@ export function BuilderPage({ model = 'page' }: BuilderPageProps) {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        // Fetch content using Builder SDK
-        const fetchedContent = await builder
-          .get(model, {
-            userAttributes: {
-              urlPath: currentUrl,
-            },
-          })
-          .promise();
+        const fetchedContent = await fetchBuilderContent(model, currentUrl);
 
         if (fetchedContent) {
           setContent(fetchedContent);
@@ -53,14 +47,15 @@ export function BuilderPage({ model = 'page' }: BuilderPageProps) {
     );
   }
 
-  // Always render BuilderComponent for preview/edit mode or if content exists
-  if (Builder.isPreviewing || Builder.isEditing || content) {
+  // Always render Content component for preview/edit mode or if content exists
+  if (isPreviewing() || content) {
     return (
       <>
         {content && <BuilderSEO content={content} />}
-        <BuilderComponent 
-          model={model} 
+        <Content 
+          model={model}
           content={content}
+          apiKey={builderApiKey}
         />
       </>
     );

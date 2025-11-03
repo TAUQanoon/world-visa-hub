@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
 import { BuilderPage } from '@/components/builder/BuilderPage';
-import { builder, Builder } from '@builder.io/react';
+import { isPreviewing, fetchOneEntry } from '@builder.io/sdk-react';
+import { builderApiKey } from '@/lib/builder';
 
 export default function BuilderContent() {
   const location = useLocation();
@@ -9,21 +10,21 @@ export default function BuilderContent() {
 
   useEffect(() => {
     const checkContent = async () => {
-      // Always render in preview/edit mode
-      if (Builder.isPreviewing || Builder.isEditing) {
+      // Always render in preview mode
+      if (isPreviewing()) {
         setShouldRender(true);
         return;
       }
 
       try {
-        // Check if content exists for this URL using Builder SDK
-        const content = await builder
-          .get('page', {
-            userAttributes: {
-              urlPath: location.pathname,
-            },
-          })
-          .promise();
+        // Check if content exists for this URL
+        const content = await fetchOneEntry({
+          model: 'page',
+          apiKey: builderApiKey,
+          userAttributes: {
+            urlPath: location.pathname,
+          },
+        });
 
         setShouldRender(!!content);
       } catch (error) {
