@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
 import { BuilderPage } from '@/components/builder/BuilderPage';
-import { builder } from '@builder.io/react';
+import { builder, Builder } from '@builder.io/react';
 
 export default function BuilderContent() {
   const location = useLocation();
@@ -10,7 +10,7 @@ export default function BuilderContent() {
   useEffect(() => {
     const checkContent = async () => {
       // Always render in preview/edit mode
-      if (builder.isPreviewing() || builder.isEditing()) {
+      if (Builder.isPreviewing || Builder.isEditing) {
         setShouldRender(true);
         return;
       }
