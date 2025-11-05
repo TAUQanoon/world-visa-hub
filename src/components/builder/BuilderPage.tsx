@@ -1,4 +1,4 @@
-import { BuilderComponent, builder } from '@builder.io/react';
+import { BuilderComponent, builder, Builder } from '@builder.io/react';
 import { useEffect, useState } from 'react';
 import { useBuilderAnalytics } from '@/hooks/useBuilderAnalytics';
 import { BuilderSEO } from './BuilderSEO';
@@ -52,7 +52,7 @@ export function BuilderPage({ model = 'page' }: BuilderPageProps) {
   }
 
   // Always render BuilderComponent for preview/edit mode
-  if (builder.isPreviewing() || builder.isEditing() || content) {
+  if (Builder.isPreviewing || Builder.isEditing || content) {
     return (
       <>
         {content && <BuilderSEO content={content} />}

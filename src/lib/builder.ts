@@ -1,4 +1,5 @@
-import { builder } from '@builder.io/react';
+import { builder, Builder } from '@builder.io/react';
+import { CTAButton, ServiceCard, FAQAccordion, TestimonialBlock, StatsCounter } from '@/components/builder/CustomComponents';
 
 export const builderApiKey = import.meta.env.VITE_BUILDER_IO_API_KEY || '';
 
