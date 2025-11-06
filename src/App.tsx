@@ -23,11 +23,7 @@ import StaffMessages from "./pages/staff/Messages";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminUsers from "./pages/admin/Users";
 import AdminVisaTypes from "./pages/admin/VisaTypes";
-import AdminBuilderWebhooks from "./pages/admin/BuilderWebhooks";
-import AdminBuilderForms from "./pages/admin/BuilderForms";
-import AdminBuilderAnalytics from "./pages/admin/BuilderAnalytics";
 import ClientCaseDetail from "./pages/client/CaseDetail";
-import BuilderContent from "./pages/BuilderContent";
 
 const queryClient = new QueryClient();
 
@@ -88,16 +84,13 @@ const App = () => (
               <Route index element={<AdminDashboard />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="visa-types" element={<AdminVisaTypes />} />
-              <Route path="builder-webhooks" element={<AdminBuilderWebhooks />} />
-              <Route path="builder-forms" element={<AdminBuilderForms />} />
-              <Route path="builder-analytics" element={<AdminBuilderAnalytics />} />
               <Route path="forms" element={<div className="text-center py-12 text-muted-foreground">Form Templates (Coming Soon)</div>} />
               <Route path="payments" element={<div className="text-center py-12 text-muted-foreground">Payment Management (Coming Soon)</div>} />
               <Route path="settings" element={<div className="text-center py-12 text-muted-foreground">System Settings (Coming Soon)</div>} />
             </Route>
 
-            {/* Builder.io dynamic content pages - must be before 404 */}
-            <Route path="*" element={<BuilderContent />} />
+            {/* 404 Not Found */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

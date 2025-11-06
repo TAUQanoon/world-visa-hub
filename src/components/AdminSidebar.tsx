@@ -6,9 +6,6 @@ import {
   FileEdit, 
   Settings, 
   DollarSign,
-  Webhook,
-  FileText,
-  BarChart3,
   LogOut 
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -33,9 +30,6 @@ const adminItems = [
   { title: "Visa Types", url: "/admin/visa-types", icon: Briefcase },
   { title: "Form Templates", url: "/admin/forms", icon: FileEdit },
   { title: "Payments", url: "/admin/payments", icon: DollarSign },
-  { title: "Builder Webhooks", url: "/admin/builder-webhooks", icon: Webhook },
-  { title: "Builder Forms", url: "/admin/builder-forms", icon: FileText },
-  { title: "Builder Analytics", url: "/admin/builder-analytics", icon: BarChart3 },
   { title: "Settings", url: "/admin/settings", icon: Settings },
 ];
 

@@ -1,7 +1,7 @@
 # GlobalVisa Consultancy Platform
 
 ## Overview
-A comprehensive visa consultation and case management platform for students seeking to study abroad, particularly in China and Saudi Arabia. The application provides role-based portals for clients, staff, and administrators with integrated document management, messaging, payments tracking, and Builder.io CMS capabilities.
+A comprehensive visa consultation and case management platform for students seeking to study abroad, particularly in China and Saudi Arabia. The application provides role-based portals for clients, staff, and administrators with integrated document management, messaging, and payments tracking.
 
 ## Project Status
 **Last Updated:** November 6, 2025
@@ -14,15 +14,23 @@ A comprehensive visa consultation and case management platform for students seek
 - **Styling:** Tailwind CSS 3.4.18
 - **UI Components:** Radix UI, shadcn/ui
 - **Backend/Auth:** Supabase (PostgreSQL + Authentication)
-- **CMS:** Builder.io
 - **Package Manager:** npm (previously attempted with Bun, but switched due to sucrase compatibility issues)
 
-## Recent Changes (Migration from Vercel to Replit)
+## Recent Changes
+
+### November 6, 2025 - Builder.io Cleanup
+**Changes Made:**
+- Removed all Builder.io related code and dependencies
+- Cleaned up admin portal to remove Builder-specific features
+- Updated routing to use standard 404 page instead of dynamic Builder content
+- Removed @builder.io/react package (73 packages removed)
+- Deleted all Builder.io components, pages, hooks, and Supabase functions
+- Updated admin sidebar to remove Builder menu items
 
 ### November 6, 2025 - Replit Migration
 **Changes Made:**
 1. Resolved multiple git merge conflicts in:
-   - `src/main.tsx` - cleaned up Builder.io initialization imports
+   - `src/main.tsx` - cleaned up initialization imports
    - `src/pages/BuilderContent.tsx` - unified preview/edit mode checking logic
 
 2. Fixed Vite configuration for Replit:
@@ -43,7 +51,6 @@ A comprehensive visa consultation and case management platform for students seek
 5. Environment variables configured:
    - VITE_SUPABASE_URL
    - VITE_SUPABASE_PUBLISHABLE_KEY
-   - VITE_BUILDER_IO_API_KEY
 
 **Critical Technical Details:**
 - The app MUST use npm (not Bun) due to Tailwind CSS's dependency on `sucrase`
@@ -53,7 +60,7 @@ A comprehensive visa consultation and case management platform for students seek
 ## Architecture
 
 ### User Roles & Portals
-1. **Client Portal** (`/client/*`)
+1. **Client Portal** (`/portal/*`)
    - Dashboard with case overview
    - Document upload/management
    - Messaging with staff
@@ -70,15 +77,15 @@ A comprehensive visa consultation and case management platform for students seek
 3. **Admin Portal** (`/admin/*`)
    - User management
    - Visa types configuration
-   - Builder.io integration (webhooks, forms, analytics)
-   - System-wide settings
+   - Form templates (coming soon)
+   - Payment management (coming soon)
+   - System-wide settings (coming soon)
 
 ### Key Features
 - **Authentication:** Supabase-based auth with role-based access control
 - **Document Management:** Upload, categorize, and track visa-related documents
 - **Case Tracking:** Complete lifecycle management from application to decision
 - **Messaging:** Real-time communication between clients and staff
-- **Builder.io CMS:** Dynamic content management for marketing pages
 - **Payment Tracking:** Monitor payment status and history
 
 ## Project Structure
@@ -86,7 +93,6 @@ A comprehensive visa consultation and case management platform for students seek
 src/
 ├── components/
 │   ├── admin/          # Admin-specific components
-│   ├── builder/        # Builder.io integration components
 │   ├── case-detail/    # Case management components
 │   ├── client-profile/ # Client profile components
 │   ├── documents/      # Document upload/management
@@ -111,14 +117,12 @@ src/
 - Node.js 20.x (provided by Replit)
 - npm (DO NOT use Bun)
 - Supabase account with project credentials
-- Builder.io account (optional, for CMS features)
 
 ### Environment Variables
 Required secrets (configured in Replit Secrets):
 ```
 VITE_SUPABASE_URL=your-supabase-project-url
 VITE_SUPABASE_PUBLISHABLE_KEY=your-supabase-anon-key
-VITE_BUILDER_IO_API_KEY=your-builder-io-api-key (optional)
 ```
 
 ### Running the App
@@ -145,9 +149,8 @@ Database schema includes:
 
 ## Known Issues & Warnings
 1. **Package Manager:** Must use npm, not Bun (due to sucrase/Tailwind compatibility)
-2. **Builder.io Warning:** Console shows "isPreviewing is not available" - this is a known issue and doesn't affect functionality
-3. **@types/dompurify:** Deprecated package warning (dompurify includes its own types)
-4. **Security:** 2 moderate vulnerabilities reported by npm audit (review with `npm audit` for details)
+2. **@types/dompurify:** Deprecated package warning (dompurify includes its own types)
+3. **Security:** 2 moderate vulnerabilities reported by npm audit (review with `npm audit` for details)
 
 ## User Preferences
 - None documented yet
@@ -156,8 +159,9 @@ Database schema includes:
 - Address npm security vulnerabilities
 - Consider upgrading to Tailwind CSS v4 (requires PostCSS config changes)
 - Remove deprecated @types/dompurify package
-- Add comprehensive error handling for Builder.io integration
 - Implement proper loading states for all async operations
+- Add comprehensive form templates system
+- Build out payment management features
 
 ## Deployment
 For production deployment on Replit:
@@ -169,5 +173,4 @@ For production deployment on Replit:
 ## Support & Resources
 - Original Project: https://lovable.dev/projects/12b75b12-c2d5-486a-9d9a-038cb17ebc7b
 - Supabase Docs: https://supabase.com/docs
-- Builder.io Docs: https://www.builder.io/c/docs
 - Replit Docs: https://docs.replit.com
