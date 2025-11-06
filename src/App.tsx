@@ -24,6 +24,7 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AdminUsers from "./pages/admin/Users";
 import AdminVisaTypes from "./pages/admin/VisaTypes";
 import ClientCaseDetail from "./pages/client/CaseDetail";
+import { PlasmicPage } from "./components/plasmic/PlasmicPage";
 
 const queryClient = new QueryClient();
 
@@ -88,6 +89,9 @@ const App = () => (
               <Route path="payments" element={<div className="text-center py-12 text-muted-foreground">Payment Management (Coming Soon)</div>} />
               <Route path="settings" element={<div className="text-center py-12 text-muted-foreground">System Settings (Coming Soon)</div>} />
             </Route>
+
+            {/* Plasmic Content Pages */}
+            <Route path="/content/*" element={<PlasmicPage />} />
 
             {/* 404 Not Found */}
             <Route path="*" element={<NotFound />} />
