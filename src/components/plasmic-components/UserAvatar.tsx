@@ -12,7 +12,15 @@ export function UserAvatar({
   size = "default",
   className 
 }: UserAvatarProps) {
-  const { user } = useAuth();
+  let user;
+  
+  try {
+    const auth = useAuth();
+    user = auth.user;
+  } catch (error) {
+    // Auth context not available
+    user = null;
+  }
 
   if (!user) {
     return null;

@@ -12,7 +12,18 @@ export function ProtectedContent({
   fallback = null,
   requireAuth = true
 }: ProtectedContentProps) {
-  const { user, loading } = useAuth();
+  let user;
+  let loading;
+  
+  try {
+    const auth = useAuth();
+    user = auth.user;
+    loading = auth.loading;
+  } catch (error) {
+    // Auth context not available - assume not logged in
+    user = null;
+    loading = false;
+  }
 
   if (loading) {
     return (
