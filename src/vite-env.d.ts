@@ -3,8 +3,8 @@
 interface ImportMetaEnv {
   readonly VITE_SUPABASE_URL: string
   readonly VITE_SUPABASE_PUBLISHABLE_KEY: string
-  readonly PLASMIC_PROJECT_ID: string
-  readonly PLASMIC_API_TOKEN: string
+  readonly VITE_PLASMIC_PROJECT_ID: string
+  readonly VITE_PLASMIC_API_TOKEN: string
 }
 
 interface ImportMeta {
