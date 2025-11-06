@@ -14,14 +14,28 @@ export function SignInButton({
   size = "default",
   className 
 }: SignInButtonProps) {
-  const navigate = useNavigate();
+  let navigate;
+  
+  try {
+    navigate = useNavigate();
+  } catch (error) {
+    navigate = null;
+  }
+
+  const handleClick = () => {
+    if (navigate) {
+      navigate("/auth");
+    } else {
+      window.location.href = "/auth";
+    }
+  };
 
   return (
     <Button 
       variant={variant}
       size={size}
       className={className}
-      onClick={() => navigate("/auth")}
+      onClick={handleClick}
     >
       {text}
     </Button>

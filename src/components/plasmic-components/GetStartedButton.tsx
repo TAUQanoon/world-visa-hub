@@ -16,14 +16,28 @@ export function GetStartedButton({
   className,
   redirectTo = "/auth"
 }: GetStartedButtonProps) {
-  const navigate = useNavigate();
+  let navigate;
+  
+  try {
+    navigate = useNavigate();
+  } catch (error) {
+    navigate = null;
+  }
+
+  const handleClick = () => {
+    if (navigate) {
+      navigate(redirectTo);
+    } else {
+      window.location.href = redirectTo;
+    }
+  };
 
   return (
     <Button 
       variant={variant}
       size={size}
       className={className}
-      onClick={() => navigate(redirectTo)}
+      onClick={handleClick}
     >
       {text}
     </Button>

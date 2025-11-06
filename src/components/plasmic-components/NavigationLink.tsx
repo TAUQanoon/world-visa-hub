@@ -12,16 +12,30 @@ export function NavigationLink({
   children,
   className 
 }: NavigationLinkProps) {
-  const navigate = useNavigate();
+  let navigate;
+  
+  try {
+    navigate = useNavigate();
+  } catch (error) {
+    // Not in router context, use window.location as fallback
+    navigate = null;
+  }
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (navigate) {
+      navigate(href);
+    } else {
+      // Fallback to window.location if router context is not available
+      window.location.href = href;
+    }
+  };
 
   return (
     <a
       href={href}
       className={className}
-      onClick={(e) => {
-        e.preventDefault();
-        navigate(href);
-      }}
+      onClick={handleClick}
     >
       {children}
     </a>

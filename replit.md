@@ -13,10 +13,30 @@ A comprehensive visa consultation and case management platform for students seek
 - **Build Tool:** Vite 5.4.11
 - **Styling:** Tailwind CSS 3.4.18
 - **UI Components:** Radix UI, shadcn/ui
+- **Visual Page Builder:** Plasmic (@plasmicapp/loader-react)
 - **Backend/Auth:** Supabase (PostgreSQL + Authentication)
 - **Package Manager:** npm (previously attempted with Bun, but switched due to sucrase compatibility issues)
 
 ## Recent Changes
+
+### November 6, 2025 - Plasmic Integration & Component Registration
+**Changes Made:**
+- Installed and configured Plasmic visual page builder (@plasmicapp/loader-react)
+- Created `src/components/plasmic-components/` directory with reusable, functional components
+- Registered 20+ components with Plasmic for drag-and-drop page building:
+  - **Functional Action Components:** SignInButton, SignUpButton, GetStartedButton, LogoutButton
+  - **Auth Components:** UserAvatar, ProtectedContent, NavigationLink
+  - **UI Components:** Button, Card (+ sub-components), Input, Badge, Alert (+ sub-components), Separator
+- Updated `src/lib/plasmic.ts` with full component registration including prop configurations
+- Environment variables configured with VITE_ prefix for client-side access:
+  - VITE_PLASMIC_PROJECT_ID
+  - VITE_PLASMIC_API_TOKEN
+
+**How It Works:**
+- Team members can create/edit pages visually at https://studio.plasmic.app
+- Pages automatically sync and appear at `/content/[page-name]` routes
+- No code deployment needed - changes from Plasmic Studio sync automatically
+- Registered components maintain full functionality (buttons navigate, auth works, etc.)
 
 ### November 6, 2025 - Builder.io Cleanup
 **Changes Made:**
@@ -92,23 +112,27 @@ A comprehensive visa consultation and case management platform for students seek
 ```
 src/
 ├── components/
-│   ├── admin/          # Admin-specific components
-│   ├── case-detail/    # Case management components
-│   ├── client-profile/ # Client profile components
-│   ├── documents/      # Document upload/management
-│   └── ui/            # Reusable UI components (shadcn/ui)
+│   ├── admin/              # Admin-specific components
+│   ├── case-detail/        # Case management components
+│   ├── client-profile/     # Client profile components
+│   ├── documents/          # Document upload/management
+│   ├── plasmic/            # Plasmic page rendering
+│   ├── plasmic-components/ # Registered components for Plasmic
+│   └── ui/                 # Reusable UI components (shadcn/ui)
 ├── contexts/
-│   └── AuthContext.tsx # Authentication state management
-├── hooks/             # Custom React hooks
+│   └── AuthContext.tsx     # Authentication state management
+├── hooks/                  # Custom React hooks
 ├── integrations/
-│   └── supabase/      # Supabase client and types
-├── layouts/           # Role-based layout wrappers
-├── lib/               # Utility functions and helpers
-├── pages/             # Route components
+│   └── supabase/           # Supabase client and types
+├── layouts/                # Role-based layout wrappers
+├── lib/
+│   ├── plasmic.ts          # Plasmic loader & component registration
+│   └── utils.ts            # Utility functions and helpers
+├── pages/                  # Route components
 │   ├── admin/
 │   ├── client/
 │   └── staff/
-└── main.tsx          # App entry point
+└── main.tsx               # App entry point
 ```
 
 ## Development
@@ -123,7 +147,11 @@ Required secrets (configured in Replit Secrets):
 ```
 VITE_SUPABASE_URL=your-supabase-project-url
 VITE_SUPABASE_PUBLISHABLE_KEY=your-supabase-anon-key
+VITE_PLASMIC_PROJECT_ID=your-plasmic-project-id
+VITE_PLASMIC_API_TOKEN=your-plasmic-api-token
 ```
+
+**Important:** All environment variables must have the `VITE_` prefix to be accessible in the browser (Vite requirement for security).
 
 ### Running the App
 The development server is configured to auto-start via Replit workflow:
@@ -170,7 +198,55 @@ For production deployment on Replit:
 3. Configure deployment to serve from `dist/` folder
 4. Set up proper domain/SSL via Replit deployment settings
 
+## Plasmic Visual Page Builder
+
+### Overview
+Plasmic is integrated to allow non-technical team members to create and manage content pages visually, similar to Shopify's experience. Team members can control themes, colors, fonts, and layout without touching code.
+
+### Available Components
+The following components are registered and available in Plasmic Studio:
+
+**Functional Action Components:**
+- `SignInButton` - Redirects to /auth sign-in page
+- `SignUpButton` - Redirects to /auth sign-up page
+- `GetStartedButton` - Customizable CTA with configurable redirect
+- `LogoutButton` - Signs user out and shows logout icon
+
+**Auth Components:**
+- `UserAvatar` - Displays current user's avatar with optional name
+- `ProtectedContent` - Shows/hides content based on authentication status
+- `NavigationLink` - Navigates to internal routes with React Router
+
+**UI Components:**
+- `Button` - Full button with variants (default, outline, ghost, etc.)
+- `Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, `CardFooter` - Card layout components
+- `Input` - Text input fields
+- `Badge` - Labels and tags
+- `Alert`, `AlertTitle`, `AlertDescription` - Alert messages
+- `Separator` - Horizontal/vertical dividers
+
+### How to Use Plasmic
+
+1. **Access Plasmic Studio:** Visit https://studio.plasmic.app and log in
+2. **Create Pages:** Design pages visually using drag-and-drop
+3. **Use Registered Components:** All components listed above are available in the component panel
+4. **Configure Props:** Each component has configurable properties (text, variant, size, etc.)
+5. **Publish:** Changes auto-sync - no code deployment needed
+6. **Access Pages:** Pages appear at `/content/[page-name]` routes automatically
+
+### Routes
+- Existing portals (`/portal/*`, `/staff/*`, `/admin/*`) remain code-based
+- Plasmic pages render at `/content/*` routes
+- Example: A page named "homepage" in Plasmic → accessible at `/content/homepage`
+
+### Technical Details
+- **Component Source:** `src/components/plasmic-components/`
+- **Registration File:** `src/lib/plasmic.ts`
+- **Page Renderer:** `src/components/plasmic/PlasmicPage.tsx`
+- **Routing:** Configured in `src/App.tsx` with catch-all route `/content/*`
+
 ## Support & Resources
 - Original Project: https://lovable.dev/projects/12b75b12-c2d5-486a-9d9a-038cb17ebc7b
 - Supabase Docs: https://supabase.com/docs
 - Replit Docs: https://docs.replit.com
+- Plasmic Docs: https://docs.plasmic.app

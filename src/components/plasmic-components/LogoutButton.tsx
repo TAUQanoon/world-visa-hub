@@ -17,14 +17,30 @@ export function LogoutButton({
   className,
   showIcon = true
 }: LogoutButtonProps) {
-  const { signOut } = useAuth();
+  let signOut;
+  
+  try {
+    const auth = useAuth();
+    signOut = auth.signOut;
+  } catch (error) {
+    signOut = null;
+  }
+
+  const handleClick = () => {
+    if (signOut) {
+      signOut();
+    } else {
+      // Fallback: redirect to auth page if context not available
+      window.location.href = "/auth";
+    }
+  };
 
   return (
     <Button 
       variant={variant}
       size={size}
       className={className}
-      onClick={signOut}
+      onClick={handleClick}
     >
       {showIcon && <LogOut className="mr-2 h-4 w-4" />}
       {text}
