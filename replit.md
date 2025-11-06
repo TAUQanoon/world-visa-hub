@@ -244,6 +244,10 @@ The following components are registered and available in Plasmic Studio:
 - **Registration File:** `src/lib/plasmic.ts`
 - **Page Renderer:** `src/components/plasmic/PlasmicPage.tsx`
 - **Routing:** Configured in `src/App.tsx` with catch-all route `/content/*`
+- **Context Handling:** All components are designed to work with or without React Router/Auth context
+  - Navigation components use React Router when available, fall back to `window.location`
+  - Auth components gracefully handle missing AuthContext and render appropriate fallbacks
+  - This ensures components work reliably in any Plasmic page configuration
 
 ## Support & Resources
 - Original Project: https://lovable.dev/projects/12b75b12-c2d5-486a-9d9a-038cb17ebc7b
