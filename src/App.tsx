@@ -24,6 +24,7 @@ import AdminUsers from "./pages/admin/Users";
 import AdminVisaTypes from "./pages/admin/VisaTypes";
 import ClientCaseDetail from "./pages/client/CaseDetail";
 import { PlasmicPage } from "./components/plasmic/PlasmicPage";
+import PlasmicHost from "./pages/PlasmicHost";
 
 const queryClient = new QueryClient();
 
@@ -91,6 +92,9 @@ const App = () => (
 
             {/* Plasmic Content Pages */}
             <Route path="/content/*" element={<PlasmicPage />} />
+
+            {/* Plasmic Host for Component Discovery */}
+            <Route path="/plasmic-host" element={<PlasmicHost />} />
 
             {/* 404 Not Found */}
             <Route path="*" element={<NotFound />} />
