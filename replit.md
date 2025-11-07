@@ -192,11 +192,47 @@ Database schema includes:
 - Build out payment management features
 
 ## Deployment
-For production deployment on Replit:
-1. Ensure all environment variables are set in production secrets
-2. Run `npm run build` to create production build
-3. Configure deployment to serve from `dist/` folder
-4. Set up proper domain/SSL via Replit deployment settings
+
+### Deployment Configuration
+The app is configured for **Autoscale Deployment** (stateless web application):
+- **Build Command:** `npm run build`
+- **Run Command:** `npx serve -s dist -l 5000`
+- **Deployment Type:** Autoscale (perfect for stateless React SPAs)
+
+### How to Deploy
+
+1. **Open Deployments Tool:**
+   - Click "All tools" in left sidebar
+   - Select "Deployments"
+   - Or search for "Deployments"
+
+2. **Configure Production Secrets:**
+   Before deploying, add these environment variables in the deployment settings:
+   ```
+   VITE_SUPABASE_URL=your-supabase-url
+   VITE_SUPABASE_PUBLISHABLE_KEY=your-supabase-key
+   VITE_PLASMIC_PROJECT_ID=your-plasmic-project-id
+   VITE_PLASMIC_API_TOKEN=your-plasmic-api-token
+   ```
+
+3. **Deploy:**
+   - Select "Autoscale" deployment
+   - Choose your domain (subdomain or custom)
+   - Click "Deploy"
+   - Your app will build and go live in a few minutes
+
+4. **Access Your Site:**
+   - Production URL will be provided after deployment
+   - Site runs 24/7 without needing Replit open
+   - Scales automatically based on traffic
+
+### Build Process
+The production build:
+- Compiles TypeScript to optimized JavaScript
+- Bundles all React components and dependencies
+- Generates static HTML, CSS, and JS files in `dist/` folder
+- Minifies and optimizes for performance
+- Total build size: ~1.2MB (gzipped: ~319KB)
 
 ## Plasmic Visual Page Builder
 
