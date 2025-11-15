@@ -38,7 +38,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Navigate to="/content/home" replace />} />
             <Route path="/auth" element={<Auth />} />
-            
+
             {/* Client Portal Routes */}
             <Route
               path="/portal"
@@ -68,8 +68,22 @@ const App = () => (
               <Route index element={<StaffDashboard />} />
               <Route path="cases" element={<StaffCases />} />
               <Route path="case/:caseId" element={<StaffCaseDetail />} />
-              <Route path="clients" element={<div className="text-center py-12 text-muted-foreground">Clients Database (Coming Soon)</div>} />
-              <Route path="documents" element={<div className="text-center py-12 text-muted-foreground">Document Review (Coming Soon)</div>} />
+              <Route
+                path="clients"
+                element={
+                  <div className="text-center py-12 text-muted-foreground">
+                    Clients Database (Coming Soon)
+                  </div>
+                }
+              />
+              <Route
+                path="documents"
+                element={
+                  <div className="text-center py-12 text-muted-foreground">
+                    Document Review (Coming Soon)
+                  </div>
+                }
+              />
               <Route path="messages" element={<StaffMessages />} />
             </Route>
 
@@ -85,9 +99,30 @@ const App = () => (
               <Route index element={<AdminDashboard />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="visa-types" element={<AdminVisaTypes />} />
-              <Route path="forms" element={<div className="text-center py-12 text-muted-foreground">Form Templates (Coming Soon)</div>} />
-              <Route path="payments" element={<div className="text-center py-12 text-muted-foreground">Payment Management (Coming Soon)</div>} />
-              <Route path="settings" element={<div className="text-center py-12 text-muted-foreground">System Settings (Coming Soon)</div>} />
+              <Route
+                path="forms"
+                element={
+                  <div className="text-center py-12 text-muted-foreground">
+                    Form Templates (Coming Soon)
+                  </div>
+                }
+              />
+              <Route
+                path="payments"
+                element={
+                  <div className="text-center py-12 text-muted-foreground">
+                    Payment Management (Coming Soon)
+                  </div>
+                }
+              />
+              <Route
+                path="settings"
+                element={
+                  <div className="text-center py-12 text-muted-foreground">
+                    System Settings (Coming Soon)
+                  </div>
+                }
+              />
             </Route>
 
             {/* Plasmic Content Pages */}
@@ -97,6 +132,7 @@ const App = () => (
             <Route path="/plasmic-host" element={<PlasmicHost />} />
 
             {/* 404 Not Found */}
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
