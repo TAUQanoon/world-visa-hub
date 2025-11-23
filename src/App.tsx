@@ -2,10 +2,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import { ClientLayout } from "./layouts/ClientLayout";
@@ -23,11 +22,9 @@ import StaffMessages from "./pages/staff/Messages";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminUsers from "./pages/admin/Users";
 import AdminVisaTypes from "./pages/admin/VisaTypes";
-import AdminBuilderWebhooks from "./pages/admin/BuilderWebhooks";
-import AdminBuilderForms from "./pages/admin/BuilderForms";
-import AdminBuilderAnalytics from "./pages/admin/BuilderAnalytics";
 import ClientCaseDetail from "./pages/client/CaseDetail";
-import BuilderContent from "./pages/BuilderContent";
+import { PlasmicPage } from "./components/plasmic/PlasmicPage";
+import PlasmicHost from "./pages/PlasmicHost";
 
 const queryClient = new QueryClient();
 
@@ -39,9 +36,9 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<Navigate to="/content/home" replace />} />
             <Route path="/auth" element={<Auth />} />
-            
+
             {/* Client Portal Routes */}
             <Route
               path="/portal"
@@ -71,8 +68,22 @@ const App = () => (
               <Route index element={<StaffDashboard />} />
               <Route path="cases" element={<StaffCases />} />
               <Route path="case/:caseId" element={<StaffCaseDetail />} />
-              <Route path="clients" element={<div className="text-center py-12 text-muted-foreground">Clients Database (Coming Soon)</div>} />
-              <Route path="documents" element={<div className="text-center py-12 text-muted-foreground">Document Review (Coming Soon)</div>} />
+              <Route
+                path="clients"
+                element={
+                  <div className="text-center py-12 text-muted-foreground">
+                    Clients Database (Coming Soon)
+                  </div>
+                }
+              />
+              <Route
+                path="documents"
+                element={
+                  <div className="text-center py-12 text-muted-foreground">
+                    Document Review (Coming Soon)
+                  </div>
+                }
+              />
               <Route path="messages" element={<StaffMessages />} />
             </Route>
 
@@ -88,16 +99,41 @@ const App = () => (
               <Route index element={<AdminDashboard />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="visa-types" element={<AdminVisaTypes />} />
-              <Route path="builder-webhooks" element={<AdminBuilderWebhooks />} />
-              <Route path="builder-forms" element={<AdminBuilderForms />} />
-              <Route path="builder-analytics" element={<AdminBuilderAnalytics />} />
-              <Route path="forms" element={<div className="text-center py-12 text-muted-foreground">Form Templates (Coming Soon)</div>} />
-              <Route path="payments" element={<div className="text-center py-12 text-muted-foreground">Payment Management (Coming Soon)</div>} />
-              <Route path="settings" element={<div className="text-center py-12 text-muted-foreground">System Settings (Coming Soon)</div>} />
+              <Route
+                path="forms"
+                element={
+                  <div className="text-center py-12 text-muted-foreground">
+                    Form Templates (Coming Soon)
+                  </div>
+                }
+              />
+              <Route
+                path="payments"
+                element={
+                  <div className="text-center py-12 text-muted-foreground">
+                    Payment Management (Coming Soon)
+                  </div>
+                }
+              />
+              <Route
+                path="settings"
+                element={
+                  <div className="text-center py-12 text-muted-foreground">
+                    System Settings (Coming Soon)
+                  </div>
+                }
+              />
             </Route>
 
-            {/* Builder.io dynamic content pages - must be before 404 */}
-            <Route path="*" element={<BuilderContent />} />
+            {/* Plasmic Content Pages */}
+            <Route path="/content/*" element={<PlasmicPage />} />
+
+            {/* Plasmic Host for Component Discovery */}
+            <Route path="/plasmic-host" element={<PlasmicHost />} />
+
+            {/* 404 Not Found */}
+
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
